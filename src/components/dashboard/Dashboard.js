@@ -7,11 +7,12 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const [userAdd, setUserAdd] = useState({});
+  const [newValue, setNewValue] = useState({});
 
   //dom
   const navigate = useNavigate();
   //custom hooks
-  const [getData, setGetData] = useFetchData();
+  const getData = useFetchData(newValue);
 
   //user defined function
   const handleUpdate = (u_id) => {
@@ -23,7 +24,7 @@ const Dashboard = () => {
     const deleteAcknow = await userDeleteData();
     if (deleteAcknow.success) {
       alert(deleteAcknow.message);
-      setGetData((prevData) => [...prevData]);
+      setNewValue({});
 
       localStorage.removeItem("id");
     } else {
@@ -36,24 +37,27 @@ const Dashboard = () => {
     const acknow = await userAddData(userAdd);
     if (acknow.success) {
       alert(acknow.message);
-      setGetData((prevData) => [...prevData, userAdd]);
+      setNewValue(userAdd);
     } else {
       console.log(acknow);
     }
   };
+  // console.log(newValue);
   return (
     <div className="dashboard-container">
       <h2>Product</h2>
       <br />
-      {getData.map((value, index) => (
-        <div key={index}>
-          <li>{value.name}</li>
-          <button onClick={() => handleUpdate(value.id)}>Update</button> &nbsp;
-          <button onClick={() => handleDelete(value.id)}>Delete</button>
-          <br />
-          <br />
-        </div>
-      ))}
+      {newValue &&
+        getData.map((value, index) => (
+          <div key={index}>
+            <li>{value.name}</li>
+            <button onClick={() => handleUpdate(value.id)}>Update</button>
+            &nbsp;
+            <button onClick={() => handleDelete(value.id)}>Delete</button>
+            <br />
+            <br />
+          </div>
+        ))}
       <br />
       <form onSubmit={handleAdd}>
         <input

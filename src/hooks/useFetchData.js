@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export const useFetchData = () => {
+export const useFetchData = (newValue) => {
   const [product, setProduct] = useState([]);
 
   useEffect(() => {
@@ -18,9 +18,8 @@ export const useFetchData = () => {
       );
       setProduct(response.data.data);
     };
-
     getData();
-  }, [product]);
+  }, [newValue]);
 
-  return [product, setProduct];
+  return product;
 };
