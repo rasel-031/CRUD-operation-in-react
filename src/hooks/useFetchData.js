@@ -20,7 +20,7 @@ export const useFetchData = () => {
     };
 
     getData();
-  }, []);
+  }, [product]);
 
-  return product;
+  return [product, setProduct];
 };

@@ -7,11 +7,11 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const [userAdd, setUserAdd] = useState({});
-  const [value, setValue] = useState({});
+
   //dom
   const navigate = useNavigate();
   //custom hooks
-  const getData = useFetchData();
+  const [getData, setGetData] = useFetchData();
 
   //user defined function
   const handleUpdate = (u_id) => {
@@ -23,7 +23,8 @@ const Dashboard = () => {
     const deleteAcknow = await userDeleteData();
     if (deleteAcknow.success) {
       alert(deleteAcknow.message);
-      window.location.reload(false);
+      setGetData((prevData) => [...prevData]);
+
       localStorage.removeItem("id");
     } else {
       console.log(deleteAcknow);
@@ -33,17 +34,13 @@ const Dashboard = () => {
   const handleAdd = async (event) => {
     event.preventDefault();
     const acknow = await userAddData(userAdd);
-
     if (acknow.success) {
       alert(acknow.message);
-      window.location.reload(false);
+      setGetData((prevData) => [...prevData, userAdd]);
     } else {
       console.log(acknow);
     }
-
-    setValue(...value, { acknow });
   };
-  console.log(value);
   return (
     <div className="dashboard-container">
       <h2>Product</h2>
@@ -62,7 +59,9 @@ const Dashboard = () => {
         <input
           type="text"
           placeholder="Enter name for add"
+          name="name"
           onChange={(e) => setUserAdd({ ...userAdd, name: e.target.value })}
+          required
         />
         &nbsp;
         <button>Add</button>
